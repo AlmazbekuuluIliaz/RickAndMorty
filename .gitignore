@@ -1,0 +1,32 @@
+# Виртуальное окружение
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+
+# База данных SQLite (пересоздаётся через migrate + fetch_rick_and_morty)
+db.sqlite3
+db.sqlite3-journal
+
+# Секреты и переменные окружения
+.env
+*.env
+
+# IDE / редакторы
+.vscode/
+.idea/
+
+# ОС
+.DS_Store
+Thumbs.db
+
+# Логи
+*.log
+
+# Собранная статика (если появится collectstatic)
+/staticfiles/
