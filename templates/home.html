@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Главная — Rick and Morty Explorer{% endblock %}
+
+{% block content %}
+
+    <!-- ===== Hero-блок (п.5.2) ===== -->
+    <section class="text-center py-5 mb-4 rounded-3 bg-body-tertiary">
+        <h1 class="display-4 fw-bold">
+            <span class="text-success">Rick</span> &amp; <span class="text-info">Morty</span> Explorer
+        </h1>
+        <p class="lead text-body-secondary col-lg-8 mx-auto">
+            Исследуй персонажей, локации и эпизоды вселенной Rick and Morty.
+        </p>
+        <div class="d-flex gap-2 justify-content-center flex-wrap mt-4">
+            <a href="{% url 'character_list' %}" class="btn btn-success btn-lg">Персонажи</a>
+            <a href="#" class="btn btn-outline-info btn-lg disabled">Локации</a>
+            <a href="#" class="btn btn-outline-light btn-lg disabled">Эпизоды</a>
+        </div>
+    </section>
+
+    <!-- ===== Статистика (п.5.2) ===== -->
+    <div class="row g-3 text-center">
+        <div class="col-6 col-lg-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="display-5 fw-bold text-success">{{ characters_count }}</div>
+                    <div class="text-body-secondary">Персонажей</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="display-5 fw-bold text-info">{{ locations_count }}</div>
+                    <div class="text-body-secondary">Локаций</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="display-5 fw-bold text-warning">{{ episodes_count }}</div>
+                    <div class="text-body-secondary">Эпизодов</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="display-5 fw-bold text-danger">{{ notes_count }}</div>
+                    <div class="text-body-secondary">Заметок</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

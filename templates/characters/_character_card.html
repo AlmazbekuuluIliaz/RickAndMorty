@@ -1,0 +1,27 @@
+{% load rm_extras %}
+{% comment %}
+Одна карточка персонажа. Подключается через {% include %} внутри цикла,
+поэтому ждёт в контексте переменную `character`. Вынесено отдельно, чтобы
+не дублировать разметку (ТЗ, п.12 и п.13).
+
+Статус и вид переводим на русский фильтрами status_ru / species_ru.
+Цвет бейджа определяем по оригинальному значению статуса из API.
+{% endcomment %}
+<div class="col">
+    <div class="card h-100">
+        <img src="{{ character.image }}" class="card-img-top" alt="{{ character.name }}" loading="lazy">
+        <div class="card-body">
+            <h5 class="card-title mb-2">{{ character.name }}</h5>
+            <p class="card-text mb-0">
+                {% if character.status == 'Alive' %}
+                    <span class="badge text-bg-success">{{ character.status|status_ru }}</span>
+                {% elif character.status == 'Dead' %}
+                    <span class="badge text-bg-danger">{{ character.status|status_ru }}</span>
+                {% else %}
+                    <span class="badge text-bg-secondary">{{ character.status|status_ru }}</span>
+                {% endif %}
+                <span class="text-body-secondary">{{ character.species|species_ru }}</span>
+            </p>
+        </div>
+    </div>
+</div>

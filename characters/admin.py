@@ -27,13 +27,8 @@ class CharacterAdmin(admin.ModelAdmin):
     search_fields = ('name', 'species', 'type')
     list_filter = ('status', 'species', 'gender')
     ordering = ('api_id',)
-    # select_related убирает лишние SQL-запросы к Location в списке admin
-    # (origin и location — это ForeignKey).
     list_select_related = ('origin', 'location')
-    # autocomplete подгружает локации по поиску, а не грузит все сразу
-    # (работает, т.к. у LocationAdmin задан search_fields).
     autocomplete_fields = ('origin', 'location')
-    # filter_horizontal — удобный двухпанельный виджет для M2M с эпизодами.
     filter_horizontal = ('episodes',)
     readonly_fields = ('created', 'updated_at')
 

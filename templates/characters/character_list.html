@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Персонажи — Rick and Morty Explorer{% endblock %}
+
+{% block content %}
+
+    <h1 class="h3 mb-4">Персонажи</h1>
+
+    <!-- Сетка карточек: адаптивное число колонок (1 на телефоне → 4 на десктопе). -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+        {% for character in page_obj %}
+            {% include "characters/_character_card.html" %}
+        {% endfor %}
+    </div>
+
+    <!-- Пагинация (пока простая: назад / счётчик / вперёд). -->
+    {% if page_obj.paginator.num_pages > 1 %}
+        <nav class="mt-4" aria-label="Пагинация">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Назад</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Назад</span></li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">
+                        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                    </span>
+                </li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперёд</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Вперёд</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+
+{% endblock %}

@@ -3,6 +3,11 @@ venv/
 .venv/
 env/
 
+# Node.js (зависимости фронтенда, пересоздаются через npm install)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
 # Python
 __pycache__/
 *.py[cod]
