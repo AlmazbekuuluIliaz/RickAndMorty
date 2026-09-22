@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Локации — Rick and Morty Explorer{% endblock %}
+
+{% block content %}
+
+    <h1 class="h3 mb-4">Локации</h1>
+
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-12 col-md-5">
+            <input type="text" name="search" value="{{ search }}" class="form-control"
+                   placeholder="Поиск по названию">
+        </div>
+        <div class="col-6 col-md-3">
+            <select name="type" class="form-select">
+                <option value="">Все типы</option>
+                {% for value in type_options %}
+                    <option value="{{ value }}" {% if value == type %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-6 col-md-2">
+            <select name="dimension" class="form-select">
+                <option value="">Все измерения</option>
+                {% for value in dimension_options %}
+                    <option value="{{ value }}" {% if value == dimension %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-12 col-md-2 d-grid">
+            <button type="submit" class="btn btn-success">Применить</button>
+        </div>
+    </form>
+
+    {% if page_obj %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+            {% for location in page_obj %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">
+                                <a href="{% url 'location_detail' location.pk %}" class="text-reset text-decoration-none stretched-link">
+                                    {{ location.name }}
+                                </a>
+                            </h5>
+                            <p class="card-text mb-0">
+                                {% if location.type %}<span class="badge text-bg-light">{{ location.type }}</span>{% endif %}
+                                {% if location.dimension %}<span class="text-body-secondary">{{ location.dimension }}</span>{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% include "_pagination.html" %}
+    {% else %}
+        <div class="alert alert-secondary">Ничего не найдено. Попробуйте изменить запрос или фильтры.</div>
+    {% endif %}
+
+{% endblock %}

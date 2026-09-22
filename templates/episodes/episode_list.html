@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Эпизоды — Rick and Morty Explorer{% endblock %}
+
+{% block content %}
+
+    <h1 class="h3 mb-4">Эпизоды</h1>
+
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-12 col-md-10">
+            <input type="text" name="search" value="{{ search }}" class="form-control"
+                   placeholder="Поиск по названию или коду (например, S01E01)">
+        </div>
+        <div class="col-12 col-md-2 d-grid">
+            <button type="submit" class="btn btn-success">Найти</button>
+        </div>
+    </form>
+
+    {% if page_obj %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Код</th>
+                        <th>Название</th>
+                        <th>Дата выхода</th>
+                        <th class="text-end">Персонажей</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for episode in page_obj %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'episode_detail' episode.pk %}">{{ episode.episode_code }}</a>
+                            </td>
+                            <td>{{ episode.name }}</td>
+                            <td>{{ episode.air_date }}</td>
+                            <td class="text-end">{{ episode.characters_count }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% include "_pagination.html" %}
+    {% else %}
+        <div class="alert alert-secondary">Ничего не найдено. Попробуйте изменить запрос.</div>
+    {% endif %}
+
+{% endblock %}

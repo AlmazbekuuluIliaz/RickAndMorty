@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ location.name }} — Rick and Morty Explorer{% endblock %}
+
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'location_list' %}">Локации</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ location.name }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="h3 mb-3">{{ location.name }}</h1>
+
+    <dl class="row mb-4">
+        <dt class="col-sm-3 text-body-secondary">Тип</dt>
+        <dd class="col-sm-9">{{ location.type|default:"—" }}</dd>
+
+        <dt class="col-sm-3 text-body-secondary">Измерение</dt>
+        <dd class="col-sm-9">{{ location.dimension|default:"—" }}</dd>
+
+        <dt class="col-sm-3 text-body-secondary">Жителей</dt>
+        <dd class="col-sm-9">{{ residents|length }}</dd>
+    </dl>
+
+    <h2 class="h5 mb-3">Жители</h2>
+    {% if residents %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+            {% for character in residents %}
+                {% include "characters/_character_card.html" %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-secondary">В этой локации нет известных жителей.</div>
+    {% endif %}
+
+{% endblock %}

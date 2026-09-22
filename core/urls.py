@@ -19,6 +19,5 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Все страницы приложения подключаются от корня сайта.
     path('', include('characters.urls')),
 ]

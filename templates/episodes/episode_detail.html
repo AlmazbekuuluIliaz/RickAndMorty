@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ episode.name }} — Rick and Morty Explorer{% endblock %}
+
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'episode_list' %}">Эпизоды</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ episode.episode_code }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="h3 mb-3">{{ episode.name }}</h1>
+
+    <dl class="row mb-4">
+        <dt class="col-sm-3 text-body-secondary">Код эпизода</dt>
+        <dd class="col-sm-9">{{ episode.episode_code }}</dd>
+
+        <dt class="col-sm-3 text-body-secondary">Дата выхода</dt>
+        <dd class="col-sm-9">{{ episode.air_date|default:"—" }}</dd>
+
+        <dt class="col-sm-3 text-body-secondary">Персонажей</dt>
+        <dd class="col-sm-9">{{ characters|length }}</dd>
+    </dl>
+
+    <h2 class="h5 mb-3">Персонажи</h2>
+    {% if characters %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+            {% for character in characters %}
+                {% include "characters/_character_card.html" %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-secondary">В этом эпизоде нет персонажей.</div>
+    {% endif %}
+
+{% endblock %}
