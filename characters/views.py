@@ -1,15 +1,30 @@
 from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from .forms import NoteForm
+from .forms import NoteForm, RegisterForm
 from .models import Character, Episode, Location, Note
 
 CHARACTERS_PER_PAGE = 20
 LOCATIONS_PER_PAGE = 20
 EPISODES_PER_PAGE = 20
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Аккаунт создан. Добро пожаловать!')
+            return redirect('home')
+    else:
+        form = RegisterForm()
+    return render(request, 'registration/register.html', {'form': form})
 
 
 def home(request):
@@ -76,6 +91,7 @@ def character_detail(request, pk):
     return render(request, 'characters/character_detail.html', context)
 
 
+@login_required
 @require_POST
 def note_create(request, pk):
     character = get_object_or_404(
@@ -86,8 +102,7 @@ def note_create(request, pk):
     if form.is_valid():
         note = form.save(commit=False)
         note.character = character
-        if request.user.is_authenticated:
-            note.author = request.user
+        note.author = request.user
         note.save()
         messages.success(request, 'Заметка добавлена.')
         return redirect('character_detail', pk=character.pk)
@@ -96,9 +111,24 @@ def note_create(request, pk):
     return render(request, 'characters/character_detail.html', context)
 
 
+@login_required
+def note_update(request, pk):
+    note = get_object_or_404(Note, pk=pk, author=request.user)
+    if request.method == 'POST':
+        form = NoteForm(request.POST, instance=note)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Заметка обновлена.')
+            return redirect('character_detail', pk=note.character_id)
+    else:
+        form = NoteForm(instance=note)
+    return render(request, 'characters/note_edit.html', {'form': form, 'note': note})
+
+
+@login_required
 @require_POST
 def note_delete(request, pk):
-    note = get_object_or_404(Note, pk=pk)
+    note = get_object_or_404(Note, pk=pk, author=request.user)
     character_pk = note.character_id
     note.delete()
     messages.success(request, 'Заметка удалена.')

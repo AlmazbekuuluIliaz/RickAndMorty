@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Редактирование заметки — Rick and Morty Explorer{% endblock %}
+
+{% block content %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'character_list' %}">Персонажи</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'character_detail' note.character_id %}">{{ note.character.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Редактирование заметки</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <h1 class="h4 mb-3">Редактирование заметки</h1>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-2">
+                    {{ form.text }}
+                    {% if form.text.errors %}
+                        <div class="text-danger small mt-1">{{ form.text.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-success">Сохранить</button>
+                <a href="{% url 'character_detail' note.character_id %}" class="btn btn-outline-secondary">Отмена</a>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

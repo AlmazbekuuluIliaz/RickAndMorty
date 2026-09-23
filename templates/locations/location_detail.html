@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load rm_extras %}
 
 {% block title %}{{ location.name }} — Rick and Morty Explorer{% endblock %}
 
@@ -15,10 +16,10 @@
 
     <dl class="row mb-4">
         <dt class="col-sm-3 text-body-secondary">Тип</dt>
-        <dd class="col-sm-9">{{ location.type|default:"—" }}</dd>
+        <dd class="col-sm-9">{{ location.type|location_type_ru|default:"—" }}</dd>
 
         <dt class="col-sm-3 text-body-secondary">Измерение</dt>
-        <dd class="col-sm-9">{{ location.dimension|default:"—" }}</dd>
+        <dd class="col-sm-9">{{ location.dimension|dimension_ru|default:"—" }}</dd>
 
         <dt class="col-sm-3 text-body-secondary">Жителей</dt>
         <dd class="col-sm-9">{{ residents|length }}</dd>

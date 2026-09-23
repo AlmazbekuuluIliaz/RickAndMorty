@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load rm_extras %}
 
 {% block title %}Локации — Rick and Morty Explorer{% endblock %}
 
@@ -15,7 +16,7 @@
             <select name="type" class="form-select">
                 <option value="">Все типы</option>
                 {% for value in type_options %}
-                    <option value="{{ value }}" {% if value == type %}selected{% endif %}>{{ value }}</option>
+                    <option value="{{ value }}" {% if value == type %}selected{% endif %}>{{ value|location_type_ru }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -23,7 +24,7 @@
             <select name="dimension" class="form-select">
                 <option value="">Все измерения</option>
                 {% for value in dimension_options %}
-                    <option value="{{ value }}" {% if value == dimension %}selected{% endif %}>{{ value }}</option>
+                    <option value="{{ value }}" {% if value == dimension %}selected{% endif %}>{{ value|dimension_ru }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -44,8 +45,8 @@
                                 </a>
                             </h5>
                             <p class="card-text mb-0">
-                                {% if location.type %}<span class="badge text-bg-light">{{ location.type }}</span>{% endif %}
-                                {% if location.dimension %}<span class="text-body-secondary">{{ location.dimension }}</span>{% endif %}
+                                {% if location.type %}<span class="badge text-bg-light">{{ location.type|location_type_ru }}</span>{% endif %}
+                                {% if location.dimension %}<span class="text-body-secondary">{{ location.dimension|dimension_ru }}</span>{% endif %}
                             </p>
                         </div>
                     </div>

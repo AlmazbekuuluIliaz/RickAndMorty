@@ -64,16 +64,22 @@
 
     <h2 class="h5 mt-4 mb-3">Заметки</h2>
 
-    <form method="post" action="{% url 'note_create' character.pk %}" class="mb-4">
-        {% csrf_token %}
-        <div class="mb-2">
-            {{ form.text }}
-            {% if form.text.errors %}
-                <div class="text-danger small mt-1">{{ form.text.errors|striptags }}</div>
-            {% endif %}
+    {% if user.is_authenticated %}
+        <form method="post" action="{% url 'note_create' character.pk %}" class="mb-4">
+            {% csrf_token %}
+            <div class="mb-2">
+                {{ form.text }}
+                {% if form.text.errors %}
+                    <div class="text-danger small mt-1">{{ form.text.errors|striptags }}</div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-success">Добавить заметку</button>
+        </form>
+    {% else %}
+        <div class="alert alert-secondary mb-4">
+            <a href="{% url 'login' %}">Войдите</a>, чтобы оставить заметку.
         </div>
-        <button type="submit" class="btn btn-success">Добавить заметку</button>
-    </form>
+    {% endif %}
 
     {% if notes %}
         <div class="list-group">
@@ -86,11 +92,16 @@
                                 {% if note.author %}{{ note.author.username }} · {% endif %}{{ note.created_at|date:"d.m.Y H:i" }}
                             </small>
                         </div>
-                        <form method="post" action="{% url 'note_delete' note.pk %}"
-                              onsubmit="return confirm('Удалить заметку?');">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
-                        </form>
+                        {% if note.author_id == user.id %}
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'note_update' note.pk %}" class="btn btn-sm btn-outline-secondary">Изменить</a>
+                                <form method="post" action="{% url 'note_delete' note.pk %}"
+                                      onsubmit="return confirm('Удалить заметку?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                                </form>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
