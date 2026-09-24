@@ -13,6 +13,12 @@ CHARACTERS_PER_PAGE = 20
 LOCATIONS_PER_PAGE = 20
 EPISODES_PER_PAGE = 20
 
+CHARACTER_SORT_OPTIONS = {
+    'name': 'name',
+    '-name': '-name',
+    'status': 'status',
+}
+
 
 def register(request):
     if request.method == 'POST':
@@ -41,6 +47,7 @@ def character_list(request):
     search = request.GET.get('search', '').strip()
     status = request.GET.get('status', '')
     species = request.GET.get('species', '')
+    sort = request.GET.get('sort', '')
 
     characters = Character.objects.all()
     if search:
@@ -49,6 +56,8 @@ def character_list(request):
         characters = characters.filter(status=status)
     if species:
         characters = characters.filter(species=species)
+    if sort in CHARACTER_SORT_OPTIONS:
+        characters = characters.order_by(CHARACTER_SORT_OPTIONS[sort])
 
     paginator = Paginator(characters, CHARACTERS_PER_PAGE)
     page_obj = paginator.get_page(request.GET.get('page'))
@@ -61,6 +70,7 @@ def character_list(request):
         'search': search,
         'status': status,
         'species': species,
+        'sort': sort,
         'status_choices': Character.STATUS_CHOICES,
         'species_options': (
             Character.objects.exclude(species='')

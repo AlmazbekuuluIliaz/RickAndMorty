@@ -5,6 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <script>
+        (function () {
+            try {
+                var theme = localStorage.getItem('theme') || 'dark';
+                document.documentElement.setAttribute('data-bs-theme', theme);
+            } catch (e) {}
+        })();
+    </script>
+
     <title>{% block title %}Rick and Morty Explorer{% endblock %}</title>
 
     <link
@@ -32,21 +41,20 @@
 
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Главная</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Главная</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'character_list' %}">Персонажи</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'location_list' %}">Локации</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'episode_list' %}">Эпизоды</a></li>
-                </ul>
-
-                <ul class="navbar-nav ms-lg-3 align-items-lg-center">
+                    <li class="nav-item">
+                        <button type="button" id="themeToggle" class="nav-link border-0 bg-transparent"
+                                aria-label="Переключить тему">Светлая</button>
+                    </li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item d-flex align-items-center">
-                            <span class="navbar-text me-2">{{ user.username }}</span>
-                            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                        <li class="nav-item"><span class="nav-link">{{ user.username }}</span></li>
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-outline-light btn-sm">Выйти</button>
+                                <button type="submit" class="nav-link border-0 bg-transparent">Выйти</button>
                             </form>
                         </li>
                     {% else %}
@@ -82,6 +90,26 @@
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
+
+    <script>
+        (function () {
+            var btn = document.getElementById('themeToggle');
+            if (!btn) return;
+            function currentTheme() {
+                return document.documentElement.getAttribute('data-bs-theme') || 'dark';
+            }
+            function renderLabel() {
+                btn.textContent = currentTheme() === 'dark' ? 'Светлая' : 'Тёмная';
+            }
+            renderLabel();
+            btn.addEventListener('click', function () {
+                var next = currentTheme() === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-bs-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+                renderLabel();
+            });
+        })();
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>

@@ -5,3 +5,8 @@
 .card:hover {
     transform: translateY(-4px);
 }
+
+[data-bs-theme="light"] {
+    --bs-body-bg: #eef4f1;
+    --bs-tertiary-bg: #eef4f1;
+}
