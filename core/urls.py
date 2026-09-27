@@ -23,7 +23,11 @@ from characters.forms import LoginForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/login/', auth_views.LoginView.as_view(authentication_form=LoginForm), name='login'),
+    path(
+        'accounts/login/',
+        auth_views.LoginView.as_view(authentication_form=LoginForm),
+        name='login',
+    ),
     path('accounts/register/', characters_views.register, name='register'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('characters.urls')),

@@ -3,6 +3,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -94,7 +95,9 @@ def _character_detail_context(character, form):
 
 def character_detail(request, pk):
     character = get_object_or_404(
-        Character.objects.select_related('origin', 'location').prefetch_related('episodes'),
+        Character.objects.select_related(
+            'origin', 'location'
+        ).prefetch_related('episodes'),
         pk=pk,
     )
     context = _character_detail_context(character, NoteForm())
@@ -105,7 +108,9 @@ def character_detail(request, pk):
 @require_POST
 def note_create(request, pk):
     character = get_object_or_404(
-        Character.objects.select_related('origin', 'location').prefetch_related('episodes'),
+        Character.objects.select_related(
+            'origin', 'location'
+        ).prefetch_related('episodes'),
         pk=pk,
     )
     form = NoteForm(request.POST)
@@ -132,7 +137,11 @@ def note_update(request, pk):
             return redirect('character_detail', pk=note.character_id)
     else:
         form = NoteForm(instance=note)
-    return render(request, 'characters/note_edit.html', {'form': form, 'note': note})
+    return render(
+        request,
+        'characters/note_edit.html',
+        {'form': form, 'note': note},
+    )
 
 
 @login_required
@@ -141,6 +150,8 @@ def note_delete(request, pk):
     note = get_object_or_404(Note, pk=pk, author=request.user)
     character_pk = note.character_id
     note.delete()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'ok': True, 'note_id': pk})
     messages.success(request, 'Заметка удалена.')
     return redirect('character_detail', pk=character_pk)
 
@@ -198,7 +209,11 @@ def location_detail(request, pk):
 def episode_list(request):
     search = request.GET.get('search', '').strip()
 
-    episodes = Episode.objects.annotate(characters_count=Count('characters')).order_by('api_id')
+    episodes = (
+        Episode.objects
+        .annotate(characters_count=Count('characters'))
+        .order_by('api_id')
+    )
     if search:
         episodes = episodes.filter(
             Q(name__icontains=search) | Q(episode_code__icontains=search)

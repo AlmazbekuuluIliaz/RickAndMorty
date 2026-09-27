@@ -33,9 +33,13 @@ class Command(BaseCommand):
             response.raise_for_status()
             return response.json()
         except requests.Timeout:
-            raise CommandError('API не ответил вовремя (timeout). Попробуйте позже.')
+            raise CommandError(
+                'API не ответил вовремя (timeout). Попробуйте позже.'
+            )
         except requests.ConnectionError:
-            raise CommandError('Не удалось подключиться к API. Проверьте интернет.')
+            raise CommandError(
+                'Не удалось подключиться к API. Проверьте интернет.'
+            )
         except requests.HTTPError as exc:
             raise CommandError(f'API вернул HTTP-ошибку: {exc}')
         except ValueError:
@@ -110,8 +114,12 @@ class Command(BaseCommand):
                     'type': char['type'],
                     'gender': char['gender'],
                     'image': char['image'],
-                    'origin': locations.get(extract_id(char['origin']['url'])),
-                    'location': locations.get(extract_id(char['location']['url'])),
+                    'origin': locations.get(
+                        extract_id(char['origin']['url'])
+                    ),
+                    'location': locations.get(
+                        extract_id(char['location']['url'])
+                    ),
                     'created': parse_api_datetime(char.get('created')),
                 },
             )

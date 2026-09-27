@@ -53,7 +53,9 @@ class Character(models.Model):
 
     api_id = models.PositiveIntegerField(unique=True)
     name = models.CharField(max_length=255, db_index=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, blank=True)
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, blank=True
+    )
     species = models.CharField(max_length=255, blank=True)
     type = models.CharField(max_length=255, blank=True)
     gender = models.CharField(max_length=50, blank=True)
