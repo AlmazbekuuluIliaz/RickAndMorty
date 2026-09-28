@@ -3,7 +3,7 @@ venv/
 .venv/
 env/
 
-# Node.js (зависимости фронтенда, пересоздаются через npm install)
+# Node.js 
 node_modules/
 npm-debug.log*
 yarn-error.log*
@@ -14,7 +14,7 @@ __pycache__/
 *$py.class
 *.egg-info/
 
-# База данных SQLite (пересоздаётся через migrate + fetch_rick_and_morty)
+# База данных SQLite
 db.sqlite3
 db.sqlite3-journal
 
@@ -33,5 +33,5 @@ Thumbs.db
 # Логи
 *.log
 
-# Собранная статика (если появится collectstatic)
+# Собранная статика
 /staticfiles/

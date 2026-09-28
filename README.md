@@ -74,3 +74,21 @@
 - `/accounts/login/` — вход
 - `/accounts/logout/` — выход
 - `/admin/` — админка
+
+## Импорт данных
+
+Команда `fetch_rick_and_morty` загружает локации, эпизоды и персонажей из API и
+связывает их между собой. Повторный запуск обновляет существующие записи (по `api_id`),
+дубликаты не создаются.
+
+![Вывод команды fetch_rick_and_morty](docs/screenshots/fetch_rick_and_morty.jpg)
+
+При первом запуске на пустой базе вместо `Updated` будут `Created`.
+
+## Тесты
+
+```bash
+python manage.py test characters
+```
+
+![Вывод запуска тестов](docs/screenshots/tests.jpg)
